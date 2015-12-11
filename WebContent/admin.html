@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<link href="customize.css" rel="stylesheet">
+</head>
+
+<body>
+	<textarea rows="10" cols="45" id="messagesTextArea" readonly="readonly" style="height:300 px;"></textarea><br/>
+	<input type="button"  id="start" onclick="start_lottery();" value="start">
+
+    <script type="text/javascript">
+    
+    
+    
+    var websocket = new WebSocket("ws://localhost:8080/FoodTruckProject/StartLottery");
+    websocket.onmessage = function processMessage(message){
+    	var jsonData = JSON.parse(message.data);
+    	if (jsonData.message != null) messagesTextArea.value += jsonData.message + "\n";
+    }
+    function start_lottery() {	
+    	var object = {};
+        object['operation'] = 0;
+        object['id'] = 0;
+        object['next'] = 0;
+        
+    	websocket.send(JSON.stringify(object));
+    }
+    /*
+    <select id="select_round" name="select_round">
+  	<option value="1">1st round</option>
+ 	<option value="2">2ed round</option>
+  	<option value="3">3rd round</option>
+  	<option value="4">4th round</option>
+  	<option value="5">5th round</option>
+	</select>
+      */
+    </script>
+</body>
+</html>

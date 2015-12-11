@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="VerifyEmail.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<link href="customize.css" rel="stylesheet">
+</head>
+
+
+<style>
+h2,label,div,input{
+text-align: center;
+vertical-align: middle;
+}
+</style>
+<body>
+
+<div data-role="page">
+  <div data-role="header">
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1></h1>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-search ui-btn-icon-left">Question</a>
+  </div>
+
+  <div data-role="main" class="ui-content">
+   
+  	<h2> Thanks!</h2>
+   
+
+      <input type="submit" data-inline="true" id="continue" value="CONTINUE TO NEXT ROUND">
+      <input type="submit" data-inline="true" id="done" value="DONE!">
+
+<!--     </form>     -->
+
+
+  </div>
+
+
+</div> 
+<script>
+
+$(document).ready(function() {
+  
+ 
+   
+
+  $('#done').click(function() { 
+    
+    window.location.href="index_page.html";
+
+  });
+  
+  
+  
+  $('#continue').click(function() { 
+    
+    window.location.href="yourschedule.html";
+  });
+  
+});
+</script>
+</body>
+</html>

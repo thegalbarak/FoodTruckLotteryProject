@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<link href="customize.css" rel="stylesheet">
+<script src="VerifyEmail.js"></script>
+<script type="text/javascript">
+var client_id;
+//$("table").width(100);
+
+var client_id = $.cookie('truck_id');
+//alert(client_id);
+
+//var websocket = new WebSocket("ws://129.64.156.75:8080/FoodTruckProject/StartLottery");
+var websocket = new WebSocket("ws://localhost:8080/FoodTruckProject/StartLottery");
+websocket.onmessage = function processMessage(message){
+	var jsonData = JSON.parse(message.data);
+	var jsonData2 = JSON.parse(jsonData.message);
+	//alert(jsonData2.next_id);
+	//alert(jsonData2.next_position);
+	$.cookie("next_position",jsonData2.next_position);
+	if (jsonData.message != null && jsonData2.next_id == client_id){
+		alert("your turn!");
+		window.location.href = 'yourturn.html';
+		}
+	else if(jsonData2.next_next_id == client_id){
+		alert("you are the next one, get ready!");
+		}
+	}
+		
+</script>
+<style>
+td {
+    border: solid 1px black;
+    height: 5px;
+	width: 5px;
+}
+
+th{
+	height: 1px;
+	width: 1px;
+}
+
+
+h2,label,div{
+text-align: center;
+vertical-align: middle;
+}
+</style>
+		
+</head>
+<body>
+
+<div data-role="page" id="truck_1">
+  <div data-role="header">
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Your Schedule</h1>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-search ui-btn-icon-left">Question</a>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  	<h2> Your Schedule </h2>
+  	
+    <div id="truck_id"></div>  
+    <h3>Lottery Number is</h3>
+    <div id="lottery_num"></div>
+
+      <table data-role="table" id="schedule_table" class="ui-responsive table-stroke" data-mode="columntoggle">
+           <thead>
+             <tr>
+               <th data-priority="2"></th>
+               <th data-priority="2">M</th>
+               <th data-priority="2">T</th>
+               <th data-priority="2">W</th>
+               <th data-priority="2">T</th>
+               <th data-priority="2">F</th>
+               <th data-priority="2">S</th>
+               <th data-priority="2">S</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <th>Breakfast</th>
+               <td id="B_Mon1"></td>
+               <td id="B_Tue1"></td>
+               <td id="B_Wed1"></td>
+               <td id="B_Thu1"></td>
+               <td id="B_Fri1"></td>
+               <td id="B_Sat1"></td>
+               <td id="B_Sun1"></td>
+             </tr>
+             <tr>
+               <th>Lunch</th>
+               <td id="L_Mon1"></td>
+               <td id="L_Tue1" ></td>
+               <td id="L_Wed1"></td>
+               <td id="L_Thu1"></td>
+               <td id="L_Fri1"></td>
+               <td id="L_Sat1"></td>
+               <td id="L_Sun1"></td>       
+             </tr>
+             <tr>
+               <th>Dinner</th>
+               <td id="D_Mon1"></td>
+               <td id="D_Tue1"></td>
+               <td id="D_Wed1"></td>
+               <td id="D_Thu1"></td>
+               <td id="D_Fri1"></td>
+               <td id="D_Sat1"></td>
+               <td id="D_Sun1"></td>
+             </tr>
+             <tr>
+               <th>Night</th>
+               <td id="N_Mon1"></td>
+               <td id="N_Tue1"></td>
+               <td id="N_Wed1"></td>
+               <td id="N_Thu1"></td>
+               <td id="N_Fri1"></td>
+               <td id="N_Sat1"></td>
+               <td id="N_Sun1"></td>
+             </tr>
+           </tbody>
+         </table>
+         <div data-role="popup" id="popupBasic">
+			<p>This is a completely basic popup, no options set.<p>
+		</div>
+
+
+      </div>
+    </div> 
+    
+
+    <div data-role="page" id="truck_2">
+      <div data-role="header">
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+        <h1>Your Schedule</h1>
+        <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-search ui-btn-icon-left">Question</a>
+      </div>
+
+      <div data-role="main" class="ui-content">
+      	<h2> Your Schedule </h2>
+      	<h3> TRUCK  </h3>
+        <div id="truck_id"></div>  
+        <h3>Lottery Number is</h3>
+        <div id="lottery_num"></div>
+
+    <table data-role="table" id="schedule_table" class="ui-body-d ui-shadow table-stripe ui-responsive">
+         <thead>
+           <tr>
+             <th data-priority="2"></th>
+             <th data-priority="2">M</th>
+             <th data-priority="2">T</th>
+             <th data-priority="2">W</th>
+             <th data-priority="2">T</th>
+             <th data-priority="2">F</th>
+             <th data-priority="2">S</th>
+             <th data-priority="2">S</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr>
+             <th>Breakfast</th>
+             <td id="B_Mon"></td>
+             <td id="B_Tue"></td>
+             <td id="B_Wed"></td>
+             <td id="B_Thu"></td>
+             <td id="B_Fri"></td>
+             <td id="B_Sat"></td>
+             <td id="B_Sun"></td>
+           </tr>
+           <tr>
+             <th>Lunch</th>
+             <td id="L_Mon"></td>
+             <td id="L_Tue"></td>
+             <td id="L_Wed"></td>
+             <td id="L_Thu"></td>
+             <td id="L_Fri"></td>
+             <td id="L_Sat"></td>
+             <td id="L_Sun"></td>       
+           </tr>
+           <tr>
+             <th>Dinner</th>
+             <td id="D_Mon"></td>
+             <td id="D_Tue"></td>
+             <td id="D_Wed"></td>
+             <td id="D_Thu"></td>
+             <td id="D_Fri"></td>
+             <td id="D_Sat"></td>
+             <td id="D_Sun"></td>
+           </tr>
+          
+         </tbody>
+       </table>
+
+
+      </div>
+
+
+    </div>
+<!-- </div>  -->
+
+
+
+<script>
+/*$('#schedule_table tr').delegate('td','click',function() {
+alert('123');
+});*/
+var eventSource = null;
+$( document ).ready(function() {
+			    
+	 var id = $.cookie('truck_id');
+	  $("#truck_id").html("");
+	  $("#truck_id").append("<h3>Truck ID - "+id+"  </h3>");
+	  
+	  var point = $.cookie('points');
+
+	  if (point==2){
+	  var first_loc = $.cookie('firstShift_loc');
+	  var first_date = $.cookie('firstShift_date');
+	  var first_slot = $.cookie('firstShift_slot');
+	  var sec_loc = $.cookie('secondShift_loc');
+	  var sec_date = $.cookie('secondShift_date');
+	  var sec_slot = $.cookie('secondShift_slot');
+	  //alert(first_loc+" "+ first_date+" "+first_slot+" "+sec_loc+" "+sec_date+sec_slot);
+	  changeTable(first_loc,first_date,first_slot);
+	  changeTable(sec_loc,sec_date,sec_slot);
+	  }
+	  else if(point==1){
+	  var first_loc = $.cookie('firstShift_loc');
+	  var first_date = $.cookie('firstShift_date');
+	  var first_slot = $.cookie('firstShift_slot');
+	  //alert(first_loc+" "+ first_date+" "+first_slot);
+	  changeTable(first_loc,first_date,first_slot);
+	  }
+	  else{
+
+	  };
+			    
+});		
+//$("table").width(100);
+
+$('table').delegate('td','click',function() {
+//alert('column ' + $(this).index());
+
+var id = $.cookie('truck_id');
+$("#truck_id").html("");
+$("#truck_id").append("<h3>Truck ID - "+id+"  </h3>");
+});
+
+
+$(document).on('swipeleft', '.ui-page', function(event){    
+	
+    if(event.handled !== true) // This will prevent event triggering more then once
+    {    
+        var nextpage = $.mobile.activePage.next('[data-role="page"]');
+        // swipe using id of next page if exists
+        if (nextpage.length > 0) {
+            $.mobile.changePage(nextpage, {transition: "slide", reverse: false}, true, true);
+        }
+        event.handled = true;
+    }
+    return false;         
+});
+
+$(document).on('swiperight', '.ui-page', function(event){     
+	
+    if(event.handled !== true) // This will prevent event triggering more then once
+    {      
+        var prevpage = $(this).prev('[data-role="page"]');
+        if (prevpage.length > 0) {
+            $.mobile.changePage(prevpage, {transition: "slide", reverse: true}, true, true);
+        }
+        event.handled = true;
+    }
+    return false;            
+});
+
+$( document ).ready(function() {
+	var id =$.cookie('truck_id');
+	var dataString="id="+id;
+	//alert(dataString);
+	$.ajax({
+	        type: "POST",
+	        url: "DisplayAvailable",// where to send?
+	        data: dataString,
+	        dataType: "json",
+	        
+	        success: function( data, textStatus, jqXHR) {
+
+	    	if(data.success){
+	    		 var d=JSON.parse(data);
+	    		   if(d.success){
+	    		  	 	addToTable(d.avail);
+	    		   }
+	    		   else{
+	    		     alert("no available shift");
+	    		   }
+	    		alert("success");
+	    	}
+
+	    	else {
+	    		alert("fail");
+	    	}
+	
+	        }
+	        });	
+	});
+	
+function addToTable(oldShifts){
+	for(var i=0;i<oldShifts.length;i++){
+		changeTable(oldShifts[i][0],oldShifts[i][1],oldShifts[i][2]);
+	}
+	
+}
+function changeTable(loc,date,slot){
+  var day;
+  var slott;
+  switch(date){
+    case "Monday":day="Mon"; break;
+    case "Tuesday":day="Tue"; break;
+    case "Wednesday":day="Wed"; break;
+    case "Thursday":day="Thu"; break;
+    case "Friday":day="Fri"; break;
+    case "Saturday":day="Sat"; break;
+    case "Sunday":day="Sun"; break;
+    default: break;
+  }
+  switch(slot){
+    case "Breakfast":slott="B"; break;
+    case "Lunch":slott="L"; break;
+    case "Dinner":slott="D"; break;
+    default: break;
+  }
+  var s=slott+"_"+day+"1";
+  //var popup = '<a data-rel="popup" href="#popupBasic">' + loc + '</a>';
+  //alert(s);
+  document.getElementById(s).style.color="White";
+  document.getElementById(s).style.background="#2c2c2c";
+  //document.getElementById(s).innerHTML=loc;
+  //document.getElementById(s).innerHTML= popup;
+
+  //$("#"+s).append("<h2>Welcome "+name+" !! </h2>");
+}
+
+
+
+   
+
+</script>
+</body>
+</html>

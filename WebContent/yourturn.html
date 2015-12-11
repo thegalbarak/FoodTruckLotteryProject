@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<link href="customize.css" rel="stylesheet">
+<style>
+td {
+    border: solid 1px black;
+    height: 5px;
+    width: 5px;
+}
+
+th{
+    height: 1px;
+    width: 1px;
+}
+
+
+h2,label,div{
+text-align: center;
+vertical-align: middle;
+}
+</style>
+	
+</head>
+<body>
+	
+
+    <script type="text/javascript">
+    var client_id = $.cookie('truck_id');
+    var next_position = $.cookie('next_position');
+    //var truck_id = &.cookie('truck_id');
+    var object = {};
+    object['operation'] = 1;
+    object['id'] = client_id;
+    object['next'] = next_position;
+   
+    //var websocket = new WebSocket("ws://129.64.156.75:8080/FoodTruckProject/StartLottery");
+    var websocket = new WebSocket("ws://localhost:8080/FoodTruckProject/StartLottery");
+    
+    function client_pick() {
+    	websocket.send(JSON.stringify(object));
+    	//alert(selected_location);
+    	//alert(selected_date);
+    	//alert(selected_slot);
+    }
+    </script>
+   
+    
+
+<div data-role="page" id="truck_1">
+  <div data-role="header">
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Your Turn</h1>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-search ui-btn-icon-left">Question</a>
+  </div>
+
+  <div data-role="main" class="ui-content">
+    <h2> Your Turn </h2>
+    
+    <div id="truck_id"></div>  
+    <h3>Lottery Number is</h3>
+    <div id="lottery_num"></div>
+    <div><h4><font color="#70db70"><b>Green</b></font>= More than 1 shift open, <font color="#ffd633"><b>Yellow</b></font>= Only 1 shift left,<font color="#ff471a"> <b>Red</b></font>= Not available</h4></div>
+<h3>Click on a slot to see available shifts</h3>
+      <table data-role="table" id="schedule_table" class="ui-body-d ui-shadow table-stripe ui-responsive" data-mode="columntoggle">
+           <thead>
+             <tr id="location_name">
+               <th data-priority="2"></th>
+               <th data-priority="2">M</th>
+               <th data-priority="2">T</th>
+               <th data-priority="2">W</th>
+               <th data-priority="2">T</th>
+               <th data-priority="2">F</th>
+               <th data-priority="2">S</th>
+               <th data-priority="2">S</th>
+             </tr>
+           </thead>
+           <tbody >
+             
+           </tbody>
+         </table>
+         <div><br><p id="you_have_picked" style="color:orange; font-size:100%;"></p></div>
+        <input type="button"  id="pick" class="pickshift" onclick="client_pick();" value="pick">
+
+      </div>
+    </div> 
+     <!-- Modal -->
+  	<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 id="modaltitle"></h4>
+        </div>
+        <div class="modal-body" id="modalbody">
+        <form id="modalform">
+        
+        </form>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="choose_shift()" data-dismiss="modal">Save changes</button>
+      </div>
+      </div>
+      </div>
+      </div>
+
+<script>
+//var arrayOptions=[[[]]];
+var list = [];
+var arr = [];
+var weekday = 7;
+
+var selected_location;
+var selected_date;
+var selected_slot;
+var pick_location;
+var pick_date;
+var pick_slot;
+
+var shifts_length=65;
+arr[0] = new Array();
+arr[1] = new Array();
+arr[2] = new Array();
+arr[3] = new Array();
+arr[4] = new Array();
+arr[5] = new Array();
+arr[6] = new Array();
+
+/* $('table').delegate('td','click',function() {
+	var col = $(this).parent().children().index($(this));
+	var row = $(this).parent().parent().children().index($(this).parent());
+	alert('Row: ' + row + ', Column: ' + col);
+	$("#myModal").modal();  
+	
+}); */
+
+/* $('table tbody tr td').on('click',function(){
+	alert(123);
+    $("#myModal").modal("show");
+   /*  $("#txtfname").val($(this).closest('tr').children()[0].textContent);
+    $("#txtlname").val($(this).closest('tr').children()[1].textContent); */
+    /* $("#col").text($(this).parent().children().index($(this)));
+    $("#row").text($(this).parent().parent().children().index($(this).parent()));
+    var date;
+    switch($(this).parent().children().index($(this))){
+    case 1:date="Monday";break;
+    case 2: date = "Tuesday"; break;
+    case 3: date = "Wednesday"; break;
+    case 4: date = "Thursday"; break;
+    case 5: date = "Friday"; break;
+    case 6: date = "Saturday"; break;
+    case 7: date = "Sunday"; break;
+    default: break;
+    }
+    
+    $("#modaltitle").text(date);
+}); */ 
+
+$('#pick').click(function() { 
+	var list=[selected_location,selected_date,selected_slot];
+	var datalist=[list];
+	var dataString="id="+client_id+"&shifts="+JSON.stringify(datalist);
+	//alert(dataString);
+    $.ajax({
+        type: "POST",
+        url: "UpdateOldShifts",// where to send?
+        data: dataString,
+        dataType: "json",
+        
+        success: function( data, textStatus, jqXHR) {
+
+    		if(data.success){
+    			//alert("success");
+    			 window.location.href="NextRoundOrNot.html";
+    		}
+//     		else {
+//     			alert("fail");
+//     		}
+        //continue if received a response from the server
+   		}	
+    }); 
+   // window.location.href="NextRoundOrNot.html";	
+    window.location.href="NextRoundOrNot.html";
+});
+
+$( document ).ready(function() {
+	var all=-1;
+	var dataString="id="+all; 
+	$.ajax({
+	        type: "POST",
+	        url: "DisplayAvailable",// where to send?
+	        data: dataString,
+	        dataType: "json",
+	        
+	        success: function( data, textStatus, jqXHR) {
+
+	    	//alert(data);
+	    	// var d=JSON.parse(data);
+	    	//alert(data.avail);
+	    		   if(data.success){
+	    			  
+	    			   for(j=0;j<weekday;j++){
+	    				   for (i=0; i<shifts_length;i++){
+	    			      	 	arr[j][i] = new Array();
+	    			      	 }
+	    		   			}
+	    			   buildTable(data.avail);
+	    		   }
+	    		   else{
+	    		     alert("no available shift");
+	    		   }
+	
+	    	
+	   		}
+	        });	
+		});
+
+function func(count, day){
+	    //alert(count);
+	    //alert(day);
+	    pick_location = list[count];
+	    pick_date = day;
+	    if(arr[day-1][count].length != 0){
+	    $("#myModal").modal("show");
+	   	getShifts(count,day);
+	   	}
+}
+
+function getShifts(count,day){
+	var location=list[count];
+	var a = day-1;
+	//alert(arr[a][count].length);
+	$("#modalform").empty();
+	for(var q = 0; q < arr[a][count].length; q++){
+	//alert(arr[a][count][q]);
+	//var radioBtn = $('<input type="radio" name="'+arr[a][count][q]+'" />');
+	//alert(arr[a][count][q]);
+	var radioBtn = $('<input type="radio" id="'+arr[a][count][q]+'"value="'+arr[a][count][q]+'" name="avai_shift" onclick="pick('+arr[a][count][q]+');"/>'+arr[a][count][q]+'<br>');
+	//var radioBtn = $('<input type="radio" id="'+arr[a][count][q]+'"value="'+arr[a][count][q]+'" name="avai_shift" onclick="alert('+s+');"/>'+arr[a][count][q]+'<br>');
+	//alert('<input type="radio" value="123" name="'+q+'"/>'+arr[a][count][q]+'<br>');
+	//alert('<input type="radio" value="123" name="'+q+'"/>gal<br>');
+
+	   radioBtn.appendTo('#modalform');
+	}
+	//alert(arr[a][count].length);
+	//alert(location);
+	 $("#modaltitle").text(location);
+}
+
+// get all shifts from database
+
+
+
+function buildTable(avail){
+	 $("tbody").html("");
+	 var loc;
+	 var l;
+	 var last;
+	 var count=1;
+	 var i;
+	 var j;
+	 //var arrayOptions=new Array(new Array(7));
+	 
+	 
+	 var slot;
+	 var day;
+	 var date;
+	 //var locList=[];
+	 list.push("hell");
+	 for (var i=0;i<avail.length;i++){
+	   loc=avail[i][0];
+	   slot=avail[i][2];
+	   day=avail[i][1];
+	   	
+	   switch(day){
+	    case "Monday":date=1;break;
+	    case "Tuesday": date = 2; break;
+	    case "Wednesday": date = 3; break;
+	    case "Thursday": date = 4; break;
+	    case "Friday": date = 5; break;
+	    case "Saturday": date = 6; break;
+	    case "Sunday": date = 7; break;
+	    default: break;
+	    }
+	   //alert(arrayOptions+ " "+count+" "+date+" "+slot);
+	  
+	  // arrayOptions[count][date].push(slot);
+	  
+	   //alert(arrayOptions[count]);
+	   //locList=
+	   /* loclist.push(slot);
+	   arrayOptions[count][date]=loclist; */
+
+	   
+	   if(loc!=last){
+	     $("tbody").append('<tr><th>'+loc+'</th><td onclick="func('+count+',1)" id="'+count+'_1"></td><td onclick="func('+count+',2)"id="'+count+'_2"></td><td onclick="func('+count+',3)" id="'+count+'_3"></td><td onclick="func('+count+',4)" id="'+count+'_4"></td><td onclick="func('+count+',5)" id="'+count+'_5"></td><td onclick="func('+count+',6)" id="'+count+'_6"></td><td onclick="func('+count+',7)" id="'+count+'_7"></td></tr>');
+	     //alert('<tr><th>'+loc+'</th><td onclick="func('+loc+',Mon)"  id="'+loc+'_Mon"></td><td id="'+loc+'_Tue"></td><td id="'+loc+'_Wed"></td><td id="'+loc+'_Thu"></td><td id="'+loc+'_Fri"></td><td id="'+loc+'_Sat"></td><td id="'+loc+'_Sun"></td></tr>');
+		 list.push(loc);	 
+	     last=loc;
+	     count++;
+	   }
+	}
+	 var cont = 1;
+	 last = avail[0][0];
+	 for (var i=0;i<avail.length;i++){
+		   loc=avail[i][0];
+		   slot=avail[i][2];
+		   day=avail[i][1];
+		   switch(day){
+		    case "Monday":date=1;break;
+		    case "Tuesday": date = 2; break;
+		    case "Wednesday": date = 3; break;
+		    case "Thursday": date = 4; break;
+		    case "Friday": date = 5; break;
+		    case "Saturday": date = 6; break;
+		    case "Sunday": date = 7; break;
+		    default: break;
+		    }
+		if(loc==last)
+		{   
+			arr[date-1][cont].push(slot);
+		}
+		else
+		{	
+			last=loc;
+			cont++;
+			arr[date-1][cont].push(slot);
+		}
+	 }
+	 changecolor();
+	 //alert("done");
+}
+
+function changecolor(){
+	for (var i=0;i<weekday;i++){
+		for(var j =1; j<shifts_length ; j++){
+			if(arr[i][j].length == 0){
+				//alert(123);
+				var n = i + 1;
+				var m = j;
+				//var cell_id = list[j] +'_'+ i+1;
+				var cell_id = m+'_'+n;
+				//alert(document.getElementById(cell_id).background);
+				document.getElementById(cell_id).style.background="#ff471a";
+				//$('#cell_id').css('background-color','blue');
+			}
+			else if (arr[i][j].length == 1){
+				var n = i+1;
+				var m = j;
+				var cell_id = m+'_'+n;
+				document.getElementById(cell_id).style.background="#ffd633";
+			}
+			
+			else{
+				var n = i+1;
+				var m = j;
+				var cell_id = m+'_'+n;
+				document.getElementById(cell_id).style.background="#70db70";
+			}
+		}
+		
+	}
+}
+
+function choose_shift(){
+	switch(pick_date){
+    case 1:selected_date= "Monday";break;
+    case 2: selected_date = "Tuesday"; break;
+    case 3: selected_date = "Wednesday"; break;
+    case 4: selected_date = "Thursday"; break;
+    case 5: selected_date = "Friday"; break;
+    case 6: selected_date = "Saturday"; break;
+    case 7: selected_date = "Sunday"; break;
+    default: break;
+    }
+	selected_location = pick_location;
+	//selected_date = pick_date;
+	selected_slot = pick_slot;
+	$('#you_have_picked').text("You have picked"+selected_date+","+selected_slot+","+selected_location);
+    /* if (document.getElementById('Breakfast').checked) {
+      selected_slot = 'Breakfast'
+    }
+    else if(document.getElementById('Lunch').checked){
+      selected_slot = 'Lunch';
+    }
+    
+    else if(document.getElementById('Dinner').checked){
+        selected_slot = 'Dinner';
+      }
+    
+    else{
+    	alert("you should pick a slot")
+    } */
+	
+	//selected_slot = ;
+}
+
+function pick(a){
+	/* alert(a);
+	alert(a.defaultValue); */
+	pick_slot = a.defaultValue;
+}
+	
+</script>
+
+</body>
+</html>

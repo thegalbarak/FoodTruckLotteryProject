@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<link href="customize.css" rel="stylesheet">
+
+<script src="VerifyEmail.js"></script>
+</head>
+<style>
+h2,label,div,input{
+text-align: center;
+vertical-align: middle;
+}
+</style>
+<body>
+
+<div data-role="page">
+  <div data-role="header">
+  	<a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Registration</h1>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-search ui-btn-icon-left">Question</a>
+  </div>
+
+  <div data-role="main" class="ui-content">
+  	<div>
+    <h2>Pick Truck Name:</h2>
+   
+   	  <form method="post">
+      <fieldset class="ui-field-contain" id="foodtruck_list">
+        
+      </fieldset>
+      <h2>Verify Email:</h2>
+      <input type="email" name="email" id="email" placeholder="Your email..">
+      <h2>Verify Truck ID:</h2>
+      <input type="text" name="foodtruck" id="foodtruck" placeholder="Your Truck ID..">
+      <input type="button" data-inline="true" value="Submit" onclick="check();">
+    </form>
+     <div id="response"></div>
+    </div>
+   </div>
+
+
+</div> 
+
+</body>
+</html>

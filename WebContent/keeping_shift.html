@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="VerifyEmail.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<link href="customize.css" rel="stylesheet">
+</head>
+<style>
+h2,label,div,input{
+text-align: center;
+vertical-align: middle;
+}
+</style>
+<body>
+
+<div data-role="page">
+  <div data-role="header" >
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <h1>Registation</h1>
+    <a href="#" class="ui-btn ui-corner-all ui-shadow ui-icon-search ui-btn-icon-left">Question</a>
+  </div>
+
+  <div data-role="main" class="ui-content" >
+    <div id="welcomeName"></div>
+  	
+   	<div id="numShifts"></div>
+    <h2> Please Pick: </h2>
+    <label>1st</label>
+    <div id="first">
+    </div> 
+     
+    <label>2st</label>
+    <div id="second">
+    </div> 
+
+      <input type="submit" data-inline="true" id="goToLottery" value="GO TO LOTTERY">
+      <input type="submit" data-inline="true" id="addAnotherTruck" value="ADD ANOTHER TRUCK">
+	  <input type="submit" data-inline="true" id="noShifts" value="DONT WANT TO KEEP SHIFTS">
+  
+
+  </div>
+
+
+</div> 
+
+<script>
+
+
+$(document).ready(function() {
+  
+  //build([["0","location1","slot","day"],["0","location2","slot","day"]],"Bon me",2);
+  	var point = $.cookie('points');
+  	var name = $.cookie('name');
+  	var truck_id=$.cookie('truck_id');
+  	//alert(truck_id);
+  	var shiftList = JSON.parse($.cookie("array"));
+
+  	//var shiftList = $.cookie('array');
+  	//alert(shiftList);
+  	
+  	
+	 build(name,point,shiftList);
+
+	$('#addAnotherTruck').click(function() { 
+
+     
+      
+      var shiftList = JSON.parse($.cookie("array"));
+		if (sendShifts(name,point,shiftList,truck_id)){
+     		 window.location.href="index_page.html";
+    	} 
+	});
+	
+	
+	
+	$('#goToLottery').click(function() { 
+
+     
+      var shiftList = JSON.parse($.cookie("array"));
+		if (sendShifts(name,point,shiftList,truck_id)){
+     		window.location.href="yourschedule.html";
+    	} 
+	});
+	
+	$('#noShifts').click(function() { 
+
+	     		window.location.href="yourschedule.html";
+	    	
+		});
+	
+});
+</script>
+ 
+
+</body>
+</html>
